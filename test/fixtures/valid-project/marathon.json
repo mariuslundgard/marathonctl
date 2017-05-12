@@ -1,0 +1,44 @@
+{
+  "auth": true,
+  "marathonUrl": "https://marathon.mock",
+  "app": {
+    "id": "/user/app",
+    "cmd": "npm start",
+    "cpus": 0.1,
+    "mem": 64,
+    "disk": 0,
+    "instances": 1,
+    "container": {
+      "type": "DOCKER",
+      "docker": {
+        "image": "user/app",
+        "network": "HOST",
+        "portMappings": [
+          {
+            "containerPort": 8080,
+            "hostPort": 0,
+            "protocol": "tcp"
+          }
+        ]
+      }
+    },
+    "labels": {
+      "subdomain": "user-app"
+    },
+    "env": {
+      "APP_PORT": "8080",
+      "API_URL": "https://user-app.mesos.fixture"
+    },
+    "healthChecks": [
+      {
+        "protocol": "HTTP",
+        "portIndex": 0,
+        "path": "/health",
+        "gracePeriodSeconds": 30,
+        "intervalSeconds": 30,
+        "timeoutSeconds": 30,
+        "maxConsecutiveFailures": 3
+      }
+    ]
+  }
+}
