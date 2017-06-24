@@ -36,23 +36,21 @@ module.exports = function deploy (args, flags, opts) {
         ? null
         : ora(`Deploying ${chalk.blue(manifest.app.id)}`).start()
 
+      // Append tag to image name
+      manifest.app.container.docker.image = `${manifest.app.container.docker.image}:${tag}`
+
       return apiClient.getApp(manifest.app.id)
-        .then(() => {
-          manifest.app.container.docker.image = `${manifest.app.container.docker.image}:${tag}`
-          return apiClient.updateApp(manifest.app)
-            .then((data) => {
-              apiClient.waitForDeployment(data.deploymentId, timeoutMs)
-            })
-        })
-        .catch(() => {
-          manifest.app.container.docker.image = `${manifest.app.container.docker.image}:${tag}`
-          return apiClient.createApp(manifest.app)
-            .then((data) => {
-              return Promise.all(data.deployments.map((d) =>
-                apiClient.waitForDeployment(d.id, timeoutMs)
-              ))
-            })
-        })
+        .then(() =>
+          apiClient.updateApp(manifest.app)
+            .then((data) => [data.deploymentId])
+        )
+        .catch(() =>
+          apiClient.createApp(manifest.app)
+            .then((data) => data.deployments.map((d) => d.id))
+        )
+        .then((deploymentIds) =>
+          apiClient.waitForDeployments(deploymentIds, timeoutMs)
+        )
         .then(() => {
           if (spinner) {
             spinner.succeed(`${chalk.blue(manifest.app.id)} was deployed`)

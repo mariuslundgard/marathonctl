@@ -12,44 +12,45 @@ class MarathonClient {
 
   getApps () {
     return this.makeRequest('GET', '/apps')
-      // .then(({body}) => body)
   }
 
   getApp (id) {
     return this.makeRequest('GET', `/apps/${id.indexOf('/') === 0 ? id.substr(1) : id}`)
-      // .then(({body}) => body)
   }
 
   createApp (payload) {
     return this.makeRequest('POST', '/apps', payload)
-      // .then(({body}) => body)
   }
 
   updateApp (payload) {
     const id = payload.id
     return this.makeRequest('PUT', `/apps/${id.indexOf('/') === 0 ? id.substr(1) : id}`, payload)
-      // .then(({body}) => body)
   }
 
   deleteApp (id) {
     return this.makeRequest('DELETE', `/apps/${id.indexOf('/') === 0 ? id.substr(1) : id}`)
-      // .then(({body}) => body)
   }
 
   getDeployments () {
     return this.makeRequest('GET', '/deployments')
-      // .then(({body}) => body)
   }
 
-  waitForDeployment (deploymentId, timeoutMs = -1) {
+  waitForDeployments (deploymentIds, timeoutMs = -1) {
     const startTime = Date.now()
     const delayMs = 500
 
     const check = () => {
       return this.getDeployments().then((data) => {
         const ids = data.map((d) => d.id)
+        const found = []
 
-        if (ids.indexOf(deploymentId) > -1) {
+        ids.forEach((deploymentId) => {
+          if (deploymentIds.indexOf(deploymentId) > -1) {
+            found.push(deploymentId)
+          }
+        })
+
+        if (found.length > 0) {
           return delay(delayMs).then(() => {
             const duration = Date.now() - startTime
 

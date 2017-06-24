@@ -34,12 +34,12 @@ module.exports = function destroy (args, flags, opts) {
         : ora(`Destroying ${chalk.blue(manifest.app.id)}`).start()
 
       return apiClient.getApp(manifest.app.id)
-        .then(() => {
-          return apiClient.deleteApp(manifest.app.id)
-        })
-        .then((data) => {
-          return apiClient.waitForDeployment(data.deploymentId, timeoutMs)
-        })
+        .then(() =>
+          apiClient.deleteApp(manifest.app.id)
+        )
+        .then((data) =>
+          apiClient.waitForDeployments([data.deploymentId], timeoutMs)
+        )
         .then(() => {
           if (spinner) {
             spinner.succeed(`${chalk.blue(manifest.app.id)} was destroyed`)
