@@ -10,7 +10,7 @@ const remoteResource = require('./remoteResource')
 
 module.exports = {
   type: 'object',
-  required: ['id', 'cpus', 'mem', 'instances', 'healthChecks', 'container'],
+  required: ['id', 'container'],
   properties: {
     id: {
       type: 'string'
@@ -49,7 +49,12 @@ module.exports = {
     constraints: {
       type: 'array',
       items: [
-        {type: 'string'}
+        {
+          type: 'array',
+          items: [
+            {type: 'string'}
+          ]
+        }
       ]
     },
     acceptedResourceRoles: {
