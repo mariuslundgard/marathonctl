@@ -5,8 +5,8 @@
 const Promise = require('bluebird')
 
 const chalk = require('chalk')
-const encodeAuth = require('../encodeAuth')
-const getAuth = require('../getAuth')
+const encodeAuth = require('../lib/encodeAuth')
+const getAuth = require('../lib/getAuth')
 const loadManifest = require('../loadManifest')
 const MarathonClient = require('../lib/MarathonClient')
 const ora = require('ora')

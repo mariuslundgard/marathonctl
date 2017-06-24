@@ -3,8 +3,8 @@
 const Promise = require('bluebird')
 
 const chalk = require('chalk')
-const encodeAuth = require('../encodeAuth')
-const getAuthFilePath = require('../getAuthFilePath')
+const encodeAuth = require('../lib/encodeAuth')
+const getAuthFilePath = require('../lib/getAuthFilePath')
 const loadManifest = require('../loadManifest')
 const MarathonClient = require('../lib/MarathonClient')
 const mkdirp = Promise.promisify(require('mkdirp'))
