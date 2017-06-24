@@ -9,6 +9,7 @@ const loadManifest = require('../loadManifest')
 const MarathonClient = require('../lib/MarathonClient')
 const ora = require('ora')
 const path = require('path')
+const waitForDeployments = require('../lib/waitForDeployments')
 
 module.exports = function destroy (args, flags, opts) {
   const env = opts.env || {}
@@ -38,7 +39,7 @@ module.exports = function destroy (args, flags, opts) {
           apiClient.deleteApp(manifest.app.id)
         )
         .then((data) =>
-          apiClient.waitForDeployments([data.deploymentId], timeoutMs)
+          waitForDeployments(apiClient, [data.deploymentId], timeoutMs)
         )
         .then(() => {
           if (spinner) {

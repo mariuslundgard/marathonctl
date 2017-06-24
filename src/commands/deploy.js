@@ -9,6 +9,7 @@ const loadManifest = require('../loadManifest')
 const MarathonClient = require('../lib/MarathonClient')
 const ora = require('ora')
 const path = require('path')
+const waitForDeployments = require('../lib/waitForDeployments')
 
 module.exports = function deploy (args, flags, opts) {
   const env = opts.env || {}
@@ -47,7 +48,7 @@ module.exports = function deploy (args, flags, opts) {
             .then((data) => data.deployments.map((d) => d.id))
         )
         .then((deploymentIds) =>
-          apiClient.waitForDeployments(deploymentIds, timeoutMs)
+          waitForDeployments(apiClient, deploymentIds, timeoutMs)
         )
         .then(() => {
           if (spinner) {
