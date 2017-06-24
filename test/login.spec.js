@@ -32,7 +32,8 @@ describe('marathonctl login', () => {
     })
 
     const args = [
-      'login'
+      'login',
+      'https://marathon.mock'
     ]
 
     const flags = {

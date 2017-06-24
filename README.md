@@ -31,7 +31,7 @@ npm install marathonctl
 
     - deploy <marathon-json-path> <tag>
     - destroy <marathon-json-path>
-    - login <marathon-json-path>
+    - login <marathon-url>
     - status <marathon-json-path>
 ```
 
