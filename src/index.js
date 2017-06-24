@@ -8,9 +8,8 @@ const printUsage = () => {
 
   Options:
 
-    --force
-    --user
     --pass
+    --user
     --quiet
     --timeout <milliseconds>
 
@@ -18,7 +17,7 @@ const printUsage = () => {
 
     - deploy <marathon-json-path> <tag>
     - destroy <marathon-json-path>
-    - login <marathon-json-path>
+    - login <marathon-url>
     - status <marathon-json-path>
 `)
 }
