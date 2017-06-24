@@ -31,7 +31,7 @@ module.exports = function destroy (args, flags, opts) {
 
       const spinner = flags.quiet
         ? null
-        : ora(`Destroying ${chalk.blue(manifest.app.id)}`).start()
+        : ora(` Destroying ${chalk.blue(manifest.app.id)}`).start()
 
       return apiClient.getApp(manifest.app.id)
         .then(() =>
@@ -42,7 +42,7 @@ module.exports = function destroy (args, flags, opts) {
         )
         .then(() => {
           if (spinner) {
-            spinner.succeed(`${chalk.blue(manifest.app.id)} was destroyed`)
+            spinner.succeed(` ${chalk.blue(manifest.app.id)} was destroyed`)
           }
         })
         .catch((err) => {

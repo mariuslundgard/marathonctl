@@ -2,11 +2,13 @@
 
 const Promise = require('bluebird')
 
+const chalk = require('chalk')
 const encodeAuth = require('../encodeAuth')
 const getAuthFilePath = require('../getAuthFilePath')
 const loadManifest = require('../loadManifest')
 const MarathonClient = require('../lib/MarathonClient')
 const mkdirp = Promise.promisify(require('mkdirp'))
+const ora = require('ora')
 const path = require('path')
 const prompt = require('prompt-sync')()
 const writeFile = Promise.promisify(require('fs').writeFile)
@@ -14,10 +16,6 @@ const writeFile = Promise.promisify(require('fs').writeFile)
 module.exports = function login (args, flags, opts) {
   const env = opts.env || {}
   const manifestPath = args.shift() || 'marathon.json'
-
-  // if (!manifestPath) {
-  //   return Promise.reject(new Error('missing manifest path'))
-  // }
 
   return loadManifest(path.resolve(opts.cwd, manifestPath))
     .then((manifest) => {
@@ -35,11 +33,26 @@ module.exports = function login (args, flags, opts) {
         authString
       })
 
+      const spinner = flags.quiet
+        ? null
+        : ora(` Destroying ${chalk.blue(manifest.app.id)}`).start()
+
       return apiClient.getApps().then(() => {
         const authFilePath = getAuthFilePath(manifest.marathonUrl, env)
         return mkdirp(path.dirname(authFilePath)).then(() => {
           return writeFile(authFilePath, authString)
         })
+      })
+      .then(() => {
+        if (spinner) {
+          spinner.succeed(' Successfully logged in')
+        }
+      })
+      .catch((err) => {
+        if (spinner) {
+          spinner.stop()
+        }
+        return Promise.reject(err)
       })
     })
 }

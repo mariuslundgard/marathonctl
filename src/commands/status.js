@@ -1,5 +1,7 @@
 'use strict'
 
+const Promise = require('bluebird')
+
 const chalk = require('chalk')
 const encodeAuth = require('../encodeAuth')
 const getAuth = require('../getAuth')
@@ -29,7 +31,7 @@ module.exports = function status (args, flags, opts) {
 
       const spinner = flags.quiet
         ? null
-        : ora(`Fetching ${chalk.blue(manifest.app.id)}`).start()
+        : ora(` Fetching ${chalk.blue(manifest.app.id)}`).start()
 
       return apiClient.getApp(manifest.app.id)
         .then((data) => {
@@ -37,6 +39,12 @@ module.exports = function status (args, flags, opts) {
             spinner.stop()
             console.log(statusView(data))
           }
+        })
+        .catch((err) => {
+          if (spinner) {
+            spinner.stop()
+          }
+          return Promise.reject(err)
         })
     })
 }

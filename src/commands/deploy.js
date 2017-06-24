@@ -34,7 +34,7 @@ module.exports = function deploy (args, flags, opts) {
 
       const spinner = flags.quiet
         ? null
-        : ora(`Deploying ${chalk.blue(manifest.app.id)}`).start()
+        : ora(` Deploying ${chalk.blue(manifest.app.id)}`).start()
 
       // Append tag to image name
       manifest.app.container.docker.image = `${manifest.app.container.docker.image}:${tag}`
@@ -53,7 +53,7 @@ module.exports = function deploy (args, flags, opts) {
         )
         .then(() => {
           if (spinner) {
-            spinner.succeed(`${chalk.blue(manifest.app.id)} was deployed`)
+            spinner.succeed(` ${chalk.blue(manifest.app.id)} was deployed`)
           }
         })
         .catch((err) => {
