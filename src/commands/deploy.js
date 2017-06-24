@@ -1,7 +1,5 @@
 'use strict'
 
-/* eslint-disable max-nested-callbacks */
-
 const Promise = require('bluebird')
 
 const chalk = require('chalk')
