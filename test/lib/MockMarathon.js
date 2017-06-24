@@ -4,13 +4,11 @@
 
 const Promise = require('bluebird')
 
+const encodeAuth = require('../../src/lib/encodeAuth')
+
 const delay = (delayMs) => new Promise((resolve) => {
   setTimeout(resolve, delayMs)
 })
-
-const encodeAuthString = (user, pass) => {
-  return new Buffer(`${user}:${pass}`).toString('base64')
-}
 
 class MockMarathon {
   constructor (params) {
@@ -55,7 +53,7 @@ class MockMarathon {
     switch (this.auth) {
       case 'basic': {
         const authStrings = this.accounts.map((d) =>
-          `Basic ${encodeAuthString(d.user, d.pass)}`
+          `Basic ${encodeAuth(d.user, d.pass)}`
         )
 
         if (authStrings.indexOf(req.headers['Authorization']) > -1) {
