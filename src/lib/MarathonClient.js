@@ -58,15 +58,24 @@ class MarathonClient {
 
     return new Promise((resolve, reject) => {
       this.transport(opts, (err, res, body) => {
-        const _body = typeof body === 'string' ? JSON.parse(body) : body
+        let _body
+        try {
+          _body = JSON.parse(body)
+        } catch (parseErr) {
+          _body = body
+        }
 
         if (err) {
           err.res = res
           return reject(err)
         }
 
+        if (res.statusCode === 401) {
+          return reject(new Error('Not authorized'))
+        }
+
         if (res.statusCode >= 400) {
-          return reject(new Error(_body.message))
+          return reject(new Error(typeof _body === 'object' ? _body.message : _body))
         }
 
         return resolve(_body)
