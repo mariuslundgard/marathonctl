@@ -5,7 +5,7 @@
 module.exports = {
   type: 'object',
   required: ['containerPort', 'hostPort', 'protocol'],
-  additionalProperties: false,
+  additionalProperties: true,
   properties: {
     containerPort: {
       type: 'integer'
